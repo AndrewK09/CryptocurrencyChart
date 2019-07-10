@@ -24,9 +24,12 @@ app.get('/yesterday', (req, res) => {
     });
 });
 
-app.get('/pastMonth', (req, res) => {
+app.get('/pastMonth/:curr', (req, res) => {
+  const { curr } = req.params;
   axios
-    .get('https://api.coindesk.com/v1/bpi/historical/close.json?index=[USD]')
+    .get(
+      `https://api.coindesk.com/v1/bpi/historical/close.json?currency=${curr}`
+    )
     .then(result => {
       res.send(result.data);
     });
@@ -36,7 +39,8 @@ const pad = num => {
   return num < 10 ? '0' + num.toString() : num;
 };
 
-app.get('/pastYear', (req, res) => {
+app.get('/pastYear/:curr', (req, res) => {
+  const { curr } = req.params;
   var dateObj = new Date();
   var month = pad(dateObj.getUTCMonth() + 1);
   var day = pad(dateObj.getUTCDate());
@@ -47,22 +51,24 @@ app.get('/pastYear', (req, res) => {
 
   axios
     .get(
-      `https://api.coindesk.com/v1/bpi/historical/close.json?start=${pastYear}&end=${currYear}`
+      `https://api.coindesk.com/v1/bpi/historical/close.json?currency=${curr}&start=${pastYear}&end=${currYear}`
     )
     .then(result => {
       res.send(result.data);
     });
 });
 
-app.get('/custom/:start/:end', (req, res) => {
-  console.log('yes');
-  const { start, end } = req.params;
+app.get('/custom/:curr/:start/:end', (req, res) => {
+  const { start, end, curr } = req.params;
   axios
     .get(
-      `https://api.coindesk.com/v1/bpi/historical/close.json?start=${start}&end=${end}`
+      `https://api.coindesk.com/v1/bpi/historical/close.json?currency=${curr}&start=${start}&end=${end}`
     )
     .then(result => {
       res.send(result.data);
+    })
+    .catch(err => {
+      console.log(err);
     });
 });
 

@@ -52,9 +52,12 @@ export default class Chart extends Component {
     this.updateChart = this.updateChart.bind(this);
   }
 
-  updateChart(endpoint, start, end) {
-    let url =
-      endpoint === 'custom' ? `/custom/${start}/${end}` : `/${endpoint}`;
+  updateChart(endpoint, curr, start, end) {
+    let url = `/${endpoint}/${curr}`;
+    if (endpoint === 'custom') {
+      url += `/${start}/${end}`;
+    }
+
     return axios.get(url).then(({ data }) => {
       let dates = Object.keys(data.bpi);
       let values = Object.values(data.bpi);
@@ -70,7 +73,7 @@ export default class Chart extends Component {
   }
 
   componentDidMount() {
-    axios.get(`/pastYear`).then(({ data }) => {
+    axios.get(`/pastYear/USD`).then(({ data }) => {
       let dates = Object.keys(data.bpi);
       let values = Object.values(data.bpi);
       let newData = Object.assign({}, this.state.data);

@@ -7,7 +7,8 @@ export default class Search extends Component {
     this.state = {
       start: '',
       end: '',
-      selected: 'pastYear'
+      display: 'pastYear',
+      curr: 'USD'
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,13 +22,17 @@ export default class Search extends Component {
   }
 
   handleSelect(e) {
+    const { name, value } = e.target;
     this.setState(
       {
-        selected: e.target.value
+        [name]: value
       },
       () => {
-        if (this.state.selected !== 'custom') {
-          this.props.handleUpdate(this.state.selected);
+        const { display, curr, start, end } = this.state;
+        if (display !== 'custom') {
+          this.props.handleUpdate(display, curr);
+        } else if (display === 'custom' && name === 'curr') {
+          this.props.handleUpdate('custom', curr, start, end);
         }
       }
     );
@@ -35,16 +40,14 @@ export default class Search extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { start, end } = this.state;
-    this.props.handleUpdate('custom', start, end).then(() => {
-      this.setState({
-        selected: 'custom'
-      });
+    const { start, end, curr } = this.state;
+    this.props.handleUpdate('custom', curr, start, end).catch(err => {
+      console.log(err);
     });
   }
 
   renderCustom() {
-    if (this.state.selected === 'custom') {
+    if (this.state.display === 'custom') {
       return (
         <div className='col-auto'>
           <form onSubmit={this.handleSubmit}>
@@ -78,16 +81,32 @@ export default class Search extends Component {
   render() {
     return (
       <div className='row'>
-        <form className='col-auto'>
-          <label>
-            Display:
-            <select onChange={this.handleSelect} value={this.state.selected}>
-              <option value='pastYear'>Past year</option>
-              <option value='pastMonth'>Past month</option>
-              <option value='custom'>Custom</option>
-            </select>
-          </label>
-        </form>
+        <label className='col-auto'>
+          Display:
+          <select
+            name='display'
+            onChange={this.handleSelect}
+            value={this.state.selected}
+          >
+            <option value='pastYear'>Past year</option>
+            <option value='pastMonth'>Past month</option>
+            <option value='custom'>Custom</option>
+          </select>
+        </label>
+
+        <label className='col-auto'>
+          Currency:
+          <select
+            name='curr'
+            onChange={this.handleSelect}
+            value={this.state.selected}
+          >
+            <option value='USD'>USD</option>
+            <option value='EUR'>EUR</option>
+            <option value='GBP'>GBP</option>
+          </select>
+        </label>
+
         {this.renderCustom()}
       </div>
     );
