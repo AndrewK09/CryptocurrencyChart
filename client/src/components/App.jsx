@@ -25,13 +25,16 @@ export default class App extends Component {
 
   componentDidMount() {
     this.fetchPrice();
+    setInterval(() => {
+      this.fetchPrice();
+    }, 1000 * 60);
   }
 
   render() {
     return (
       <div className='container'>
         <h1 className='title'>Cryptocurrency Charting Tool</h1>
-        <h4>Current prices:</h4>
+        <h4>Current prices(Update every min.):</h4>
         <table className='table'>
           <thead>
             <tr>
