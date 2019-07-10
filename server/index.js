@@ -9,16 +9,9 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 const axios = require('axios');
 
 app.get('/currentPrice', (req, res) => {
-  axios
+  var prices = {};
+  return axios
     .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-    .then(result => {
-      res.send(result.data);
-    });
-});
-
-app.get('/yesterday', (req, res) => {
-  axios
-    .get('https://api.coindesk.com/v1/bpi/historical/close.json?for=yesterday')
     .then(result => {
       res.send(result.data);
     });

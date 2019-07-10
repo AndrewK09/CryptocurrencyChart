@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 
 import Search from './Search.jsx';
-
+const decimals = 3;
 export default class Chart extends Component {
   constructor(props) {
     super(props);
