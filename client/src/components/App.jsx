@@ -15,7 +15,6 @@ export default class App extends Component {
   fetchPrice() {
     Axios.get('/currentPrice').then(({ data }) => {
       const { USD, GBP, EUR } = data.bpi;
-      console.log(data.bpi);
       this.setState({
         USD: USD.rate,
         GBP: GBP.rate,
