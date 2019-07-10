@@ -16,14 +16,6 @@ app.get('/currentPrice', (req, res) => {
     });
 });
 
-app.get('/daily', (req, res) => {
-  axios
-    .get('https://api.coindesk.com/v1/bpi/historical/close.json?index=[USD]')
-    .then(result => {
-      res.send(result.data);
-    });
-});
-
 app.get('/yesterday', (req, res) => {
   axios
     .get('https://api.coindesk.com/v1/bpi/historical/close.json?for=yesterday')
@@ -32,10 +24,42 @@ app.get('/yesterday', (req, res) => {
     });
 });
 
-app.get('/yearly', (req, res) => {
+app.get('/pastMonth', (req, res) => {
+  axios
+    .get('https://api.coindesk.com/v1/bpi/historical/close.json?index=[USD]')
+    .then(result => {
+      res.send(result.data);
+    });
+});
+
+const pad = num => {
+  return num < 10 ? '0' + num.toString() : num;
+};
+
+app.get('/pastYear', (req, res) => {
+  var dateObj = new Date();
+  var month = pad(dateObj.getUTCMonth() + 1);
+  var day = pad(dateObj.getUTCDate());
+  var year = dateObj.getUTCFullYear();
+
+  let currYear = year + '-' + month + '-' + day;
+  let pastYear = year - 1 + '-' + month + '-' + day;
+
   axios
     .get(
-      'https://api.coindesk.com/v1/bpi/historical/close.json?start=2018-07-10&end=2019-07-10'
+      `https://api.coindesk.com/v1/bpi/historical/close.json?start=${pastYear}&end=${currYear}`
+    )
+    .then(result => {
+      res.send(result.data);
+    });
+});
+
+app.get('/custom/:start/:end', (req, res) => {
+  console.log('yes');
+  const { start, end } = req.params;
+  axios
+    .get(
+      `https://api.coindesk.com/v1/bpi/historical/close.json?start=${start}&end=${end}`
     )
     .then(result => {
       res.send(result.data);
