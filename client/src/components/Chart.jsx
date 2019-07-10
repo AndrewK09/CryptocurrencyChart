@@ -13,22 +13,22 @@ export default class Chart extends Component {
         labels: [],
         datasets: [
           {
-            label: 'My First dataset',
+            label: 'Bitcoin Price',
             fill: false,
             lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
+            backgroundColor: 'rgb(209, 1, 1)',
+            borderColor: 'rgb(209, 1, 1)',
             borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: '#fff',
+            pointBorderColor: 'rgb(209, 1, 1)',
+            pointBackgroundColor: 'rgb(209, 1, 1)',
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
+            pointHoverBackgroundColor: 'black',
+            pointHoverBorderColor: 'black',
+            pointHoverBorderWidth: 1,
             pointRadius: 1,
             pointHitRadius: 10,
             data: []
@@ -39,9 +39,7 @@ export default class Chart extends Component {
         scales: {
           xAxes: [
             {
-              // type: 'time',
               ticks: {
-                // autoSkip: true,
                 maxTicksLimit: 12
               }
             }
@@ -65,7 +63,6 @@ export default class Chart extends Component {
 
       newData.labels = dates;
       newData.datasets[0].data = values;
-
       this.setState({
         data: newData
       });
